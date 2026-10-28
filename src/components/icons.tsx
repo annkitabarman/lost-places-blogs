@@ -6,4 +6,5 @@ export {
   MagnifyingGlassIcon,
   MapTrifoldIcon,
   CaretDown,
+  ArrowLeftIcon,
 } from "@phosphor-icons/react";
