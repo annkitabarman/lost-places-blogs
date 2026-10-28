@@ -1,8 +1,8 @@
 import Link from "next/link";
 import {
-  ArrowUpRight,
-  Compass,
-  MagnifyingGlass,
+  ArrowUpRightIcon,
+  CompassIcon,
+  MagnifyingGlassIcon,
   MapTrifoldIcon,
 } from "@/components/icons";
 import { places, themes } from "@/data/places";
@@ -14,7 +14,7 @@ export default function Home() {
       <header className="border-b border-white/10">
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-10">
           <Link href="/" className="flex items-center gap-3">
-            <Compass size={30} weight="light" className="text-[#c6a76a]" />
+            <CompassIcon size={30} weight="light" className="text-[#c6a76a]" />
             <span className="font-serif text-xl tracking-wide">
               Atlas of Lost Places
             </span>
@@ -40,7 +40,7 @@ export default function Home() {
             className="flex items-center gap-2 border border-[#c6a76a]/50 px-4 py-2 text-sm transition hover:bg-[#c6a76a] hover:text-[#11120f]"
           >
             Start exploring
-            <ArrowUpRight size={16} />
+            <ArrowUpRightIcon size={16} />
           </Link>
         </nav>
       </header>
@@ -75,7 +75,7 @@ export default function Home() {
               >
                 <MapTrifoldIcon size={20} weight="regular" />
                 Explore the atlas
-                <ArrowUpRight size={17} />
+                <ArrowUpRightIcon size={17} />
               </Link>
 
               <Link
@@ -117,7 +117,7 @@ export default function Home() {
             <div className="absolute inset-8 border border-[#c6a76a]/20 sm:inset-12" />
 
             <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
-              <Compass
+              <CompassIcon
                 size={110}
                 weight="thin"
                 className="mb-8 text-[#c6a76a]/80"
@@ -162,7 +162,7 @@ export default function Home() {
             className="inline-flex items-center gap-2 pb-1 text-sm text-[#c6a76a] hover:text-[#e4c991]"
           >
             View the archive
-            <ArrowUpRight size={17} />
+            <ArrowUpRightIcon size={17} />
           </Link>
         </div>
 
@@ -195,7 +195,7 @@ export default function Home() {
                   </p>
                   <div className="mt-3 flex items-center justify-between gap-3">
                     <h3 className="font-serif text-2xl">{place.name}</h3>
-                    <ArrowUpRight
+                    <ArrowUpRightIcon
                       size={20}
                       className="shrink-0 text-[#c6a76a] transition-transform group-hover:-translate-y-1 group-hover:translate-x-1"
                     />
@@ -248,7 +248,7 @@ export default function Home() {
                 </p>
                 <span className="mt-auto flex items-center gap-2 pt-6 text-xs uppercase tracking-widest text-[#c6a76a]">
                   Explore collection
-                  <ArrowUpRight
+                  <ArrowUpRightIcon
                     size={16}
                     className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                   />
@@ -261,7 +261,7 @@ export default function Home() {
 
       {/* Closing call to action */}
       <section className="mx-auto max-w-7xl px-6 py-24 text-center lg:px-10 lg:py-32">
-        <MagnifyingGlass
+        <MagnifyingGlassIcon
           size={32}
           weight="light"
           className="mx-auto mb-6 text-[#c6a76a]"
@@ -279,7 +279,7 @@ export default function Home() {
           className="mt-9 inline-flex items-center gap-3 border border-[#c6a76a]/50 px-6 py-3.5 text-sm transition hover:bg-[#c6a76a] hover:text-[#11120f]"
         >
           Enter the atlas
-          <ArrowUpRight size={17} />
+          <ArrowUpRightIcon size={17} />
         </Link>
       </section>
 

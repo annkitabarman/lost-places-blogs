@@ -1,9 +1,9 @@
 "use client";
 
 export {
-  ArrowUpRight,
-  Compass,
-  MagnifyingGlass,
+  ArrowUpRightIcon,
+  CompassIcon,
+  MagnifyingGlassIcon,
   MapTrifoldIcon,
   CaretDown,
 } from "@phosphor-icons/react";
