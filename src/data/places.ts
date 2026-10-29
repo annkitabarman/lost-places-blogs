@@ -2,6 +2,7 @@ export type TimelineEvent = {
   year: string;
   title: string;
   description: string;
+  sortYear: number;
 };
 
 export type Source = {
@@ -99,30 +100,33 @@ export const places: LostPlace[] = [
     timeline: [
       {
         year: "Before Roman rule",
+        sortYear: -600,
         title: "Early settlement",
         description:
           "Pompeii develops through centuries of settlement and cultural exchange.",
       },
       {
         year: "1st century BCE",
+        sortYear: -80,
         title: "Roman colony",
         description:
           "Pompeii becomes a Roman colony and continues to grow as a regional town.",
       },
       {
         year: "79 CE",
+        sortYear: 79,
         title: "The eruption",
         description:
           "Mount Vesuvius erupts, burying Pompeii beneath volcanic material.",
       },
       {
         year: "18th century",
+        sortYear: 1748,
         title: "Excavations begin",
         description:
           "The buried town becomes the subject of organized archaeological exploration.",
       },
     ],
-
     sources: [
       {
         title: "Pompeii — Archaeological Park",
