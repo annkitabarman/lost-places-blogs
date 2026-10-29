@@ -15,13 +15,25 @@ import type { LostPlace } from "@/data/places";
 
 type MapControllerProps = {
   selectedPlace: LostPlace | null;
+  resetMap: boolean;
+  onResetComplete: () => void;
 };
 
-// Moves the map when a place is selected.
-function MapController({ selectedPlace }: MapControllerProps) {
+// Controls map movement and resetting.
+function MapController({
+  selectedPlace,
+  resetMap,
+  onResetComplete,
+}: MapControllerProps) {
   const map = useMap();
 
   useEffect(() => {
+    if (resetMap) {
+      map.flyTo([20, 10], 2, { duration: 1.2 });
+      onResetComplete();
+      return;
+    }
+
     if (selectedPlace) {
       map.flyTo(
         [selectedPlace.coordinates.lat, selectedPlace.coordinates.lng],
@@ -29,7 +41,7 @@ function MapController({ selectedPlace }: MapControllerProps) {
         { duration: 1.2 },
       );
     }
-  }, [map, selectedPlace]);
+  }, [map, selectedPlace, resetMap, onResetComplete]);
 
   return null;
 }
@@ -37,6 +49,7 @@ function MapController({ selectedPlace }: MapControllerProps) {
 export default function AtlasMapView() {
   const [query, setQuery] = useState("");
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
+  const [resetMap, setResetMap] = useState(false);
 
   const filteredPlaces = useMemo(() => {
     const searchTerm = query.trim().toLowerCase();
@@ -54,6 +67,10 @@ export default function AtlasMapView() {
 
   const selectedPlace =
     places.find((place) => place.slug === selectedSlug) ?? null;
+
+  const handleResetComplete = () => {
+    setResetMap(false);
+  };
 
   function selectPlace(place: LostPlace) {
     setSelectedSlug(place.slug);
@@ -144,6 +161,22 @@ export default function AtlasMapView() {
 
       {/* Interactive map */}
       <div className="min-w-0">
+        <div className="flex items-center justify-between gap-4 border-b border-white/10 bg-[#171813] px-4 py-3">
+          <p className="text-xs uppercase tracking-widest text-[#aaa69b]">
+            World view
+          </p>
+
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedSlug(null);
+              setResetMap(true);
+            }}
+            className="border border-[#c6a76a]/40 px-4 py-2 text-xs uppercase tracking-widest text-[#c6a76a] transition hover:bg-[#c6a76a] hover:text-[#11120f]"
+          >
+            Reset map ↺
+          </button>
+        </div>
         <MapContainer
           center={[20, 10]}
           zoom={2}
@@ -157,7 +190,11 @@ export default function AtlasMapView() {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
 
-          <MapController selectedPlace={selectedPlace} />
+          <MapController
+            selectedPlace={selectedPlace}
+            resetMap={resetMap}
+            onResetComplete={handleResetComplete}
+          />
 
           {places.map((place) => (
             <CircleMarker
