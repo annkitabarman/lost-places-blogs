@@ -12,18 +12,22 @@ import {
 import { MagnifyingGlassIcon } from "@/components/icons";
 import { places } from "@/data/places";
 import type { LostPlace } from "@/data/places";
+import { LatLngBounds } from "leaflet";
 
 type MapControllerProps = {
   selectedPlace: LostPlace | null;
   resetMap: boolean;
+  fitAll: boolean;
   onResetComplete: () => void;
+  onFitComplete: () => void;
 };
 
-// Controls map movement and resetting.
 function MapController({
   selectedPlace,
   resetMap,
+  fitAll,
   onResetComplete,
+  onFitComplete,
 }: MapControllerProps) {
   const map = useMap();
 
@@ -34,6 +38,21 @@ function MapController({
       return;
     }
 
+    if (fitAll && places.length > 0) {
+      const bounds = new LatLngBounds(
+        places.map((place) => [place.coordinates.lat, place.coordinates.lng]),
+      );
+
+      map.flyToBounds(bounds, {
+        padding: [40, 40],
+        maxZoom: 5,
+        duration: 1.2,
+      });
+
+      onFitComplete();
+      return;
+    }
+
     if (selectedPlace) {
       map.flyTo(
         [selectedPlace.coordinates.lat, selectedPlace.coordinates.lng],
@@ -41,7 +60,7 @@ function MapController({
         { duration: 1.2 },
       );
     }
-  }, [map, selectedPlace, resetMap, onResetComplete]);
+  }, [map, selectedPlace, resetMap, fitAll, onResetComplete, onFitComplete]);
 
   return null;
 }
@@ -50,6 +69,11 @@ export default function AtlasMapView() {
   const [query, setQuery] = useState("");
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
   const [resetMap, setResetMap] = useState(false);
+  const [fitAll, setFitAll] = useState(false);
+
+  const handleFitComplete = () => {
+    setFitAll(false);
+  };
 
   const filteredPlaces = useMemo(() => {
     const searchTerm = query.trim().toLowerCase();
@@ -118,7 +142,10 @@ export default function AtlasMapView() {
                 type="button"
                 onClick={() => selectPlace(place)}
                 aria-pressed={selectedSlug === place.slug}
-                className={`w-full border-b border-white/10 p-5 text-left transition hover:bg-white/[0.04] ${
+                className={`w-full border-b border-white/10 p-5 text-left transition hover:bg-white/[0.04] focus-visible:outline
+focus-visible:outline-2
+focus-visible:outline-offset-[-2px]
+focus-visible:outline-[#c6a76a] ${
                   selectedSlug === place.slug
                     ? "border-l-2 border-l-[#c6a76a] bg-white/[0.04]"
                     : "border-l-2 border-l-transparent"
@@ -161,22 +188,38 @@ export default function AtlasMapView() {
 
       {/* Interactive map */}
       <div className="min-w-0">
-        <div className="flex items-center justify-between gap-4 border-b border-white/10 bg-[#171813] px-4 py-3">
+        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 bg-[#171813] px-4 py-3">
           <p className="text-xs uppercase tracking-widest text-[#aaa69b]">
             World view
           </p>
 
-          <button
-            type="button"
-            onClick={() => {
-              setSelectedSlug(null);
-              setResetMap(true);
-            }}
-            className="border border-[#c6a76a]/40 px-4 py-2 text-xs uppercase tracking-widest text-[#c6a76a] transition hover:bg-[#c6a76a] hover:text-[#11120f]"
-          >
-            Reset map ↺
-          </button>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedSlug(null);
+                setFitAll(true);
+                setResetMap(false);
+              }}
+              className="border border-[#c6a76a]/40 px-4 py-2 text-xs uppercase tracking-widest text-[#c6a76a] transition hover:bg-[#c6a76a] hover:text-[#11120f]"
+            >
+              Fit all markers
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedSlug(null);
+                setFitAll(false);
+                setResetMap(true);
+              }}
+              className="border border-[#c6a76a]/40 px-4 py-2 text-xs uppercase tracking-widest text-[#c6a76a] transition hover:bg-[#c6a76a] hover:text-[#11120f]"
+            >
+              Reset map ↺
+            </button>
+          </div>
         </div>
+
         <MapContainer
           center={[20, 10]}
           zoom={2}
@@ -193,7 +236,9 @@ export default function AtlasMapView() {
           <MapController
             selectedPlace={selectedPlace}
             resetMap={resetMap}
+            fitAll={fitAll}
             onResetComplete={handleResetComplete}
+            onFitComplete={handleFitComplete}
           />
 
           {places.map((place) => (
