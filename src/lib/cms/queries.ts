@@ -121,3 +121,25 @@ export const placeBySlugQuery = defineQuery(`
     articleBody
   }
 `);
+
+export const allThemesQuery = defineQuery(`
+  *[_type == "theme"] | order(number asc) {
+    _id,
+    title,
+    "slug": slug.current,
+    number,
+    description,
+    symbol
+  }
+`);
+
+export const themeBySlugQuery = defineQuery(`
+  *[_type == "theme" && slug.current == $slug][0] {
+    _id,
+    title,
+    "slug": slug.current,
+    number,
+    description,
+    symbol
+  }
+`);

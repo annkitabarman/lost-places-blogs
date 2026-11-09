@@ -1,13 +1,15 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import PlaceCard from "@/components/place-card";
-import { places, themes } from "@/data/places";
+import { getPlaces, getThemeBySlug, getThemes } from "@/lib/cms/sanity";
 
 type Props = {
   params: Promise<{ slug: string }>;
 };
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const themes = await getThemes();
+
   return themes.map((theme) => ({
     slug: theme.slug,
   }));
@@ -15,7 +17,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
-  const theme = themes.find((item) => item.slug === slug);
+  const theme = await getThemeBySlug(slug);
 
   if (!theme) {
     return { title: "Theme Not Found | Atlas of Lost Places" };
@@ -29,7 +31,11 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function DiscoveryPage({ params }: Props) {
   const { slug } = await params;
-  const theme = themes.find((item) => item.slug === slug);
+
+  const [theme, places] = await Promise.all([
+    getThemeBySlug(slug),
+    getPlaces(),
+  ]);
 
   if (!theme) {
     notFound();

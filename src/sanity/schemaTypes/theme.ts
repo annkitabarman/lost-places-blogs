@@ -29,5 +29,12 @@ export const theme = defineType({
       type: "text",
       rows: 3,
     }),
+
+    defineField({
+      name: "number",
+      title: "Collection Number",
+      type: "string",
+      validation: (Rule) => Rule.required(),
+    }),
   ],
 });

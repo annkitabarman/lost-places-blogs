@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { themes } from "@/data/places";
+import { getThemes } from "@/lib/cms/sanity";
 
 export const metadata = {
   title: "Discover | Atlas of Lost Places",
@@ -7,7 +7,9 @@ export const metadata = {
     "Explore collections of buried cities, reclaimed ruins, and vanished civilizations.",
 };
 
-export default function DiscoverPage() {
+export default async function DiscoverPage() {
+  const themes = await getThemes();
+
   return (
     <main className="min-h-screen bg-[#11110f] text-[#e8e0d0]">
       <div className="mx-auto max-w-7xl px-6 py-10 md:px-10">

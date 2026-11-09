@@ -33,4 +33,13 @@ export type SanityPlace = {
   timeline?: LostPlace["timeline"];
 };
 
+export type SanityTheme = {
+  _id: string;
+  title: string;
+  slug: string;
+  number: string;
+  description: string;
+  symbol: string;
+};
+
 export type CMSPlace = LostPlace;
