@@ -5,13 +5,15 @@ import {
   ArrowUpRightIcon,
   CompassIcon,
 } from "@/components/icons";
-import { places } from "@/data/places";
+import { getPlaces, getPlaceBySlug } from "@/lib/cms/sanity";
 
 type PlacePageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const places = await getPlaces();
+
   return places.map((place) => ({
     slug: place.slug,
   }));
@@ -19,7 +21,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: PlacePageProps) {
   const { slug } = await params;
-  const place = places.find((item) => item.slug === slug);
+  const place = await getPlaceBySlug(slug);
 
   if (!place) {
     return { title: "Place not found | Atlas of Lost Places" };
@@ -27,13 +29,13 @@ export async function generateMetadata({ params }: PlacePageProps) {
 
   return {
     title: `${place.name} | Atlas of Lost Places`,
-    description: place.overview,
+    description: place.overview || place.description,
   };
 }
 
 export default async function PlacePage({ params }: PlacePageProps) {
   const { slug } = await params;
-  const place = places.find((item) => item.slug === slug);
+  const place = await getPlaceBySlug(slug);
 
   if (!place) {
     notFound();

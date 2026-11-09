@@ -44,12 +44,28 @@ export const lostPlace = defineType({
       type: "string",
       options: {
         list: [
-          { title: "Buried Settlement", value: "buried-settlement" },
-          { title: "Ancient City", value: "ancient-city" },
-          { title: "Lost Civilization", value: "lost-civilization" },
-          { title: "Abandoned City", value: "abandoned-city" },
+          { title: "Buried city", value: "Buried city" },
+          { title: "Rock-cut city", value: "Rock-cut city" },
+          {
+            title: "Ancient urban settlement",
+            value: "Ancient urban settlement",
+          },
+          { title: "Medieval stone city", value: "Medieval stone city" },
+          { title: "Temple city", value: "Temple city" },
+          { title: "Buried Settlement", value: "Buried Settlement" },
+          { title: "Ancient City", value: "Ancient City" },
+          { title: "Lost Civilization", value: "Lost Civilization" },
+          { title: "Abandoned City", value: "Abandoned City" },
         ],
       },
+    }),
+
+    defineField({
+      name: "theme",
+      title: "Theme",
+      type: "reference",
+      to: [{ type: "theme" }],
+      validation: (Rule) => Rule.required(),
     }),
 
     defineField({
@@ -70,7 +86,7 @@ export const lostPlace = defineType({
       type: "string",
     }),
 
-    // Short description
+    // Presentation
     defineField({
       name: "description",
       title: "Short Description",
@@ -79,7 +95,6 @@ export const lostPlace = defineType({
       validation: (Rule) => Rule.required(),
     }),
 
-    // Main image
     defineField({
       name: "heroImage",
       title: "Hero Image",
@@ -89,7 +104,7 @@ export const lostPlace = defineType({
       },
     }),
 
-    // Map coordinates
+    // Geography
     defineField({
       name: "coordinates",
       title: "Coordinates",
@@ -108,10 +123,102 @@ export const lostPlace = defineType({
       ],
     }),
 
-    // Long-form historical article
+    // Historical overview
+    defineField({
+      name: "overview",
+      title: "Historical Overview",
+      type: "text",
+      rows: 5,
+    }),
+
+    defineField({
+      name: "history",
+      title: "Historical Background",
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "text",
+          rows: 3,
+        }),
+      ],
+    }),
+
+    defineField({
+      name: "discovery",
+      title: "Rediscovery and Excavation",
+      type: "text",
+      rows: 5,
+    }),
+
+    // Archaeological findings
+    defineField({
+      name: "archaeologicalFindings",
+      title: "Archaeological Findings",
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "text",
+          rows: 3,
+        }),
+      ],
+    }),
+
+    // Mysteries and evidence
+    defineField({
+      name: "mysteries",
+      title: "Mysteries and Unanswered Questions",
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "object",
+          fields: [
+            defineField({
+              name: "title",
+              title: "Mystery Title",
+              type: "string",
+              validation: (Rule) => Rule.required(),
+            }),
+
+            defineField({
+              name: "description",
+              title: "Description",
+              type: "text",
+              rows: 4,
+            }),
+
+            defineField({
+              name: "evidence",
+              title: "Available Evidence",
+              type: "text",
+              rows: 4,
+            }),
+
+            defineField({
+              name: "status",
+              title: "Research Status",
+              type: "string",
+              options: {
+                list: [
+                  { title: "Unresolved", value: "Unresolved" },
+                  {
+                    title: "Partially understood",
+                    value: "Partially understood",
+                  },
+                  { title: "Popular myth", value: "Popular myth" },
+                ],
+              },
+            }),
+          ],
+        }),
+      ],
+    }),
+
+    // Long-form article
     defineField({
       name: "articleBody",
       title: "Historical Article",
+      description:
+        "Optional long-form editorial article with rich text and images.",
       type: "array",
       of: [
         defineArrayMember({
@@ -143,6 +250,7 @@ export const lostPlace = defineType({
             ],
           },
         }),
+
         defineArrayMember({
           type: "image",
           options: {
@@ -152,14 +260,7 @@ export const lostPlace = defineType({
       ],
     }),
 
-    defineField({
-      name: "theme",
-      title: "Theme",
-      type: "reference",
-      to: [{ type: "theme" }],
-      validation: (Rule) => Rule.required(),
-    }),
-
+    // Supporting documents
     defineField({
       name: "sources",
       title: "Sources",
@@ -180,6 +281,18 @@ export const lostPlace = defineType({
         defineArrayMember({
           type: "reference",
           to: [{ type: "timelineEvent" }],
+        }),
+      ],
+    }),
+
+    // Historical media
+    defineField({
+      name: "gallery",
+      title: "Historical Media Gallery",
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "historicalMedia",
         }),
       ],
     }),

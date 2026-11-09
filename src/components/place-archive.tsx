@@ -2,10 +2,14 @@
 
 import { useMemo, useState } from "react";
 import { MagnifyingGlassIcon } from "@/components/icons";
-import { places } from "@/data/places";
 import PlaceCard from "@/components/place-card";
+import type { LostPlace } from "@/data/places";
 
-export default function PlaceArchive() {
+type PlaceArchiveProps = {
+  places: LostPlace[];
+};
+
+export default function PlaceArchive({ places }: PlaceArchiveProps) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
 
@@ -24,7 +28,7 @@ export default function PlaceArchive() {
 
       return matchesSearch && matchesCategory;
     });
-  }, [query, category]);
+  }, [places, query, category]);
 
   return (
     <div>

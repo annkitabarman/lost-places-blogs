@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowLeftIcon, CompassIcon } from "@/components/icons";
 import PlaceArchive from "@/components/place-archive";
+import { getPlaces } from "@/lib/cms/sanity";
 
 export const metadata = {
   title: "Explore the Archive | Atlas of Lost Places",
@@ -8,7 +9,9 @@ export const metadata = {
     "Explore lost cities, abandoned settlements, and vanished civilizations from around the world.",
 };
 
-export default function PlacesPage() {
+export default async function PlacesPage() {
+  const places = await getPlaces();
+
   return (
     <main className="min-h-screen bg-[#11120f] text-[#e9e2d2]">
       <header className="border-b border-white/10">
@@ -41,7 +44,7 @@ export default function PlacesPage() {
           holds a fragment of a larger story.
         </p>
 
-        <PlaceArchive />
+        <PlaceArchive places={places} />
       </section>
 
       <footer className="border-t border-white/10 px-6 py-8 text-center text-xs text-[#858176]">
