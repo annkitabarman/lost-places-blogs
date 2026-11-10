@@ -7,6 +7,7 @@ import {
 } from "@/components/icons";
 import { getPlaces, getPlaceBySlug } from "@/lib/cms/sanity";
 import Image from "next/image";
+import PlaceGallery from "@/components/place-gallery";
 
 type PlacePageProps = {
   params: Promise<{ slug: string }>;
@@ -157,6 +158,9 @@ export default async function PlacePage({ params }: PlacePageProps) {
                 Timeline
               </a>
             )}
+            <a href="#gallery" className="transition hover:text-[#c6a76a]">
+              Gallery
+            </a>
 
             {place.sources.length > 0 && (
               <a href="#sources" className="transition hover:text-[#c6a76a]">
@@ -353,6 +357,28 @@ export default async function PlacePage({ params }: PlacePageProps) {
                 </div>
               </section>
             )}
+
+            {/* External image gallery */}
+            <section
+              id="gallery"
+              className="mt-20 scroll-mt-8 border-t border-white/10 pt-12"
+            >
+              <p className="text-xs uppercase tracking-[0.3em] text-[#c6a76a]">
+                Visual archive
+              </p>
+
+              <h2 className="mt-4 font-serif text-4xl sm:text-5xl">
+                Images & artefacts
+              </h2>
+
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-[#aaa69b]">
+                Photographs, archaeological sites and historical materials
+                gathered from Wikimedia Commons.
+              </p>
+
+              <PlaceGallery slug={place.slug} />
+            </section>
+
             {/* Sources */}
             {place.sources.length > 0 && (
               <section
