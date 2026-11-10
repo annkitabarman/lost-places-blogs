@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowLeftIcon, CompassIcon } from "@/components/icons";
 import AtlasMap from "@/components/atlas-map";
-import { places } from "@/data/places";
+import { getPlaces } from "@/lib/cms/sanity";
 
 export const metadata = {
   title: "Explore the Atlas | Atlas of Lost Places",
@@ -9,7 +9,19 @@ export const metadata = {
     "Explore the locations of lost cities, ancient civilizations, and abandoned settlements on an interactive world map.",
 };
 
-export default function AtlasPage() {
+export default async function AtlasPage() {
+  const places = await getPlaces();
+
+  const mappedPlaces = places.filter(
+    (place) =>
+      Number.isFinite(place.coordinates.lat) &&
+      Number.isFinite(place.coordinates.lng) &&
+      place.coordinates.lat >= -90 &&
+      place.coordinates.lat <= 90 &&
+      place.coordinates.lng >= -180 &&
+      place.coordinates.lng <= 180 &&
+      !(place.coordinates.lat === 0 && place.coordinates.lng === 0),
+  );
   return (
     <main className="min-h-screen bg-[#11120f] text-[#e9e2d2]">
       <header className="border-b border-white/10">
@@ -49,7 +61,7 @@ export default function AtlasPage() {
           </p>
 
           <p className="font-serif text-xl">
-            {places.length.toString().padStart(2, "0")}
+            {mappedPlaces.length.toString().padStart(2, "0")}
             <span className="ml-2 font-sans text-xs uppercase tracking-widest text-[#858176]">
               mapped places
             </span>
@@ -57,7 +69,7 @@ export default function AtlasPage() {
         </div>
 
         <div className="mt-8 overflow-hidden border border-white/10">
-          <AtlasMap />
+          <AtlasMap places={mappedPlaces} />
         </div>
 
         <p className="mt-4 text-xs leading-6 text-[#858176]">

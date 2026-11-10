@@ -1,6 +1,11 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import type { LostPlace } from "@/data/places";
+
+type AtlasMapProps = {
+  places: LostPlace[];
+};
 
 const AtlasMapView = dynamic(() => import("./atlas-map-view"), {
   ssr: false,
@@ -11,6 +16,6 @@ const AtlasMapView = dynamic(() => import("./atlas-map-view"), {
   ),
 });
 
-export default function AtlasMap() {
-  return <AtlasMapView />;
+export default function AtlasMap({ places }: AtlasMapProps) {
+  return <AtlasMapView places={places} />;
 }

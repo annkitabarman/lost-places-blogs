@@ -10,11 +10,11 @@ import {
   useMap,
 } from "react-leaflet";
 import { MagnifyingGlassIcon } from "@/components/icons";
-import { places } from "@/data/places";
 import type { LostPlace } from "@/data/places";
 import { LatLngBounds } from "leaflet";
 
 type MapControllerProps = {
+  places: LostPlace[];
   selectedPlace: LostPlace | null;
   resetMap: boolean;
   fitAll: boolean;
@@ -23,6 +23,7 @@ type MapControllerProps = {
 };
 
 function MapController({
+  places,
   selectedPlace,
   resetMap,
   fitAll,
@@ -60,12 +61,24 @@ function MapController({
         { duration: 1.2 },
       );
     }
-  }, [map, selectedPlace, resetMap, fitAll, onResetComplete, onFitComplete]);
+  }, [
+    places,
+    map,
+    selectedPlace,
+    resetMap,
+    fitAll,
+    onResetComplete,
+    onFitComplete,
+  ]);
 
   return null;
 }
 
-export default function AtlasMapView() {
+type AtlasMapViewProps = {
+  places: LostPlace[];
+};
+
+export default function AtlasMapView({ places }: AtlasMapViewProps) {
   const [query, setQuery] = useState("");
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
   const [resetMap, setResetMap] = useState(false);
@@ -87,7 +100,7 @@ export default function AtlasMapView() {
         place.description,
       ].some((value) => value.toLowerCase().includes(searchTerm)),
     );
-  }, [query]);
+  }, [places, query]);
 
   const selectedPlace =
     places.find((place) => place.slug === selectedSlug) ?? null;
@@ -234,6 +247,7 @@ focus-visible:outline-[#c6a76a] ${
           />
 
           <MapController
+            places={places}
             selectedPlace={selectedPlace}
             resetMap={resetMap}
             fitAll={fitAll}

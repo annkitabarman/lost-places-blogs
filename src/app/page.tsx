@@ -5,10 +5,13 @@ import {
   MagnifyingGlassIcon,
   MapTrifoldIcon,
 } from "@/components/icons";
-import { places, themes } from "@/data/places";
+import { getPlaces, getThemes } from "@/lib/cms/sanity";
 import PlaceCard from "@/components/place-card";
 
-export default function Home() {
+export default async function Home() {
+  const [places, themes] = await Promise.all([getPlaces(), getThemes()]);
+
+  const featuredPlaces = places.slice(0, 3);
   return (
     <main className="min-h-screen bg-[#11120f] text-[#e9e2d2]">
       {/* Navigation */}
@@ -168,7 +171,7 @@ export default function Home() {
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {places.map((place, index) => (
+          {featuredPlaces.map((place, index) => (
             <PlaceCard key={place.slug} place={place} index={index} />
           ))}
         </div>

@@ -1,7 +1,7 @@
 import { defineQuery } from "next-sanity";
 
 export const allPlacesQuery = defineQuery(`
-  *[_type == "lostPlace"] {
+  *[_type == "lostPlace" && defined(slug.current)] {
     _id,
     name,
     "slug": slug.current,
@@ -37,13 +37,13 @@ export const allPlacesQuery = defineQuery(`
       url
     },
 
-    "timeline": timeline[]->{
-      year,
-      title,
-      description,
-      sortYear,
-      "type": eventType
-    },
+   "timeline": timeline[]->{
+  year,
+  title,
+  description,
+  sortYear,
+  "type": eventType
+} | order(sortYear asc),
 
     gallery[]{
       title,
@@ -62,7 +62,7 @@ export const allPlacesQuery = defineQuery(`
 `);
 
 export const placeBySlugQuery = defineQuery(`
-  *[_type == "lostPlace" && slug.current == $slug][0] {
+  *[_type == "lostPlace" && defined(slug.current) && slug.current == $slug][0] {
     _id,
     name,
     "slug": slug.current,
@@ -98,13 +98,13 @@ export const placeBySlugQuery = defineQuery(`
       url
     },
 
-    "timeline": timeline[]->{
-      year,
-      title,
-      description,
-      sortYear,
-      "type": eventType
-    },
+   "timeline": timeline[]->{
+  year,
+  title,
+  description,
+  sortYear,
+  "type": eventType
+} | order(sortYear asc),
 
     gallery[]{
       title,
