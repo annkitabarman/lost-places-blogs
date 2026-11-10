@@ -29,7 +29,15 @@ export const allPlacesQuery = defineQuery(`
       "slug": slug.current
     },
 
-    "image": heroImage.asset->url,
+    "image": heroImage {
+      ...,
+      "url": asset->url,
+      "metadata": asset->metadata {
+        dimensions,
+        lqip,
+        palette
+      }
+    },
 
     "sources": sources[]->{
       title,
@@ -90,7 +98,15 @@ export const placeBySlugQuery = defineQuery(`
       "slug": slug.current
     },
 
-    "image": heroImage.asset->url,
+    "image": heroImage {
+      ...,
+      "url": asset->url,
+      "metadata": asset->metadata {
+        dimensions,
+        lqip,
+        palette
+      }
+    },
 
     "sources": sources[]->{
       title,

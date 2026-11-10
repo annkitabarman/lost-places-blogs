@@ -28,7 +28,7 @@ export type SanityPlace = {
     name: string;
     slug: string;
   }[];
-  image?: string;
+  image?: SanityImage;
   sources?: LostPlace["sources"];
   timeline?: LostPlace["timeline"];
 };
@@ -40,6 +40,29 @@ export type SanityTheme = {
   number: string;
   description: string;
   symbol: string;
+};
+
+export type SanityImage = {
+  _type: "image";
+  asset: {
+    _ref: string;
+    _type: "reference";
+  };
+  url?: string;
+  metadata?: {
+    dimensions?: {
+      width: number;
+      height: number;
+      aspectRatio: number;
+    };
+    lqip?: string;
+    palette?: {
+      dominant?: {
+        background?: string;
+        foreground?: string;
+      };
+    };
+  };
 };
 
 export type CMSPlace = LostPlace;

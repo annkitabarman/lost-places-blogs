@@ -6,6 +6,7 @@ import {
   CompassIcon,
 } from "@/components/icons";
 import { getPlaces, getPlaceBySlug } from "@/lib/cms/sanity";
+import Image from "next/image";
 
 type PlacePageProps = {
   params: Promise<{ slug: string }>;
@@ -105,12 +106,19 @@ export default async function PlacePage({ params }: PlacePageProps) {
           </div>
 
           {/* Hero image */}
-          <div
-            role="img"
-            aria-label={`Landscape representing ${place.name}`}
-            className="relative mt-12 h-[300px] overflow-hidden border border-white/10 bg-[#202119] bg-cover bg-center sm:h-[440px] lg:h-[540px]"
-            style={{ backgroundImage: `url("${place.image}")` }}
-          >
+
+          <div className="relative mt-12 h-[300px] overflow-hidden border border-white/10 bg-[#202119] sm:h-[440px] lg:h-[540px]">
+            {place.image && (
+              <Image
+                src={place.image}
+                alt={`Landscape representing ${place.name}`}
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, 1280px"
+                className="object-cover object-center"
+              />
+            )}
+
             <div className="absolute inset-0 bg-gradient-to-t from-[#11120f]/70 via-transparent to-black/10" />
 
             <p className="absolute bottom-6 left-6 text-xs uppercase tracking-[0.25em] text-white/80">

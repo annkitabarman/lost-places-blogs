@@ -1,5 +1,6 @@
 import type { LostPlace } from "@/data/places";
 import type { SanityPlace } from "./types";
+import { urlFor } from "@/sanity/lib/image";
 
 export function normalizePlace(place: SanityPlace): LostPlace {
   return {
@@ -10,7 +11,9 @@ export function normalizePlace(place: SanityPlace): LostPlace {
     category: place.category ?? "",
     themeSlug: place.theme?.slug ?? "",
     description: place.description,
-    image: place.image ?? "",
+    image: place.image
+      ? urlFor(place.image).width(1600).auto("format").url()
+      : "",
     coordinates: {
       lat: place.coordinates?.lat ?? 0,
       lng: place.coordinates?.lng ?? 0,

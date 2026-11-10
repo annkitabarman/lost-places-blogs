@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowUpRightIcon } from "@/components/icons";
 import type { LostPlace } from "@/data/places";
 
@@ -12,12 +13,16 @@ export default function PlaceCard({ place, index }: PlaceCardProps) {
     <article className="group border border-white/10 bg-[#171813] transition hover:border-[#c6a76a]/40">
       <Link href={`/places/${place.slug}`}>
         <div className="relative h-64 overflow-hidden bg-[#28291f]">
-          <div
-            role="img"
-            aria-label={`Landscape representing ${place.name}`}
-            className="absolute inset-0 bg-cover bg-center opacity-70 transition duration-700 group-hover:scale-105 group-hover:opacity-90"
-            style={{ backgroundImage: `url("${place.image}")` }}
-          />
+          {place.image && (
+            <Image
+              src={place.image}
+              alt={`Landscape representing ${place.name}`}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="object-cover object-center opacity-70 transition duration-700 group-hover:scale-105 group-hover:opacity-90"
+            />
+          )}
+
           <div className="absolute inset-0 bg-gradient-to-t from-[#11120f] via-transparent to-black/10" />
 
           <span className="absolute left-5 top-5 border border-white/20 bg-[#11120f]/70 px-3 py-1.5 text-[10px] uppercase tracking-[0.2em]">
