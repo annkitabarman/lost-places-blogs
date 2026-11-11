@@ -104,7 +104,9 @@ async function fetchWikimediaImages(
     headers: {
       "User-Agent": "AtlasOfLostPlaces/1.0 (Next.js image gallery)",
     },
-    cache: "no-store",
+    next: {
+      revalidate: 604800,
+    },
   });
 
   if (!response.ok) {

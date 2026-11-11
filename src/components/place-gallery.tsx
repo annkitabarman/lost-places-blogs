@@ -10,6 +10,8 @@ type PlaceGalleryProps = {
 
 export default function PlaceGallery({ slug }: PlaceGalleryProps) {
   const [images, setImages] = useState<ExternalImage[]>([]);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -20,6 +22,7 @@ export default function PlaceGallery({ slug }: PlaceGalleryProps) {
       try {
         setLoading(true);
         setError(null);
+        setCurrentIndex(0);
 
         const response = await fetch(
           `/api/places/${encodeURIComponent(slug)}/images`,
@@ -48,6 +51,25 @@ export default function PlaceGallery({ slug }: PlaceGalleryProps) {
     return () => controller.abort();
   }, [slug]);
 
+  const changeImage = (direction: "next" | "previous") => {
+    if (images.length <= 1 || isTransitioning) return;
+
+    setIsTransitioning(true);
+
+    setTimeout(() => {
+      setCurrentIndex((index) =>
+        direction === "next"
+          ? (index + 1) % images.length
+          : (index - 1 + images.length) % images.length,
+      );
+
+      setIsTransitioning(false);
+    }, 180);
+  };
+
+  const goToPrevious = () => changeImage("previous");
+  const goToNext = () => changeImage("next");
+
   if (loading) {
     return (
       <p className="mt-8 text-sm text-[#aaa69b]">
@@ -68,62 +90,121 @@ export default function PlaceGallery({ slug }: PlaceGalleryProps) {
     );
   }
 
+  const currentImage = images[currentIndex];
+
   return (
-    <div className="mt-10 grid gap-6 sm:grid-cols-2">
-      {images.map((image) => (
-        <figure
-          key={image.id}
-          className="overflow-hidden border border-white/10 bg-[#171813]"
-        >
+    <div className="mt-10">
+      {/* Main image */}
+      <div className="relative overflow-hidden border border-white/10 bg-[#171813]">
+        <div className="relative aspect-[4/3] overflow-hidden bg-[#202119]">
+          <Image
+            key={currentImage.id}
+            src={currentImage.imageUrl}
+            alt={currentImage.description || currentImage.title}
+            fill
+            sizes="(max-width: 1024px) 100vw, 900px"
+            className={`object-cover transition-all duration-500 ease-in-out ${
+              isTransitioning
+                ? "scale-[1.02] opacity-0"
+                : "scale-100 opacity-100"
+            }`}
+          />
+
+          {/* Previous button */}
+          {images.length > 1 && (
+            <button
+              type="button"
+              onClick={goToPrevious}
+              aria-label="Previous image"
+              className="absolute left-4 top-1/2 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/60 text-2xl text-white backdrop-blur-sm transition hover:bg-black/90"
+            >
+              ‹
+            </button>
+          )}
+
+          {/* Next button */}
+          {images.length > 1 && (
+            <button
+              type="button"
+              onClick={goToNext}
+              aria-label="Next image"
+              className="absolute right-4 top-1/2 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/60 text-2xl text-white backdrop-blur-sm transition hover:bg-black/90"
+            >
+              ›
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Image information */}
+      <div className="mt-5 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
+          <h3 className="font-serif text-2xl leading-snug">
+            {currentImage.title}
+          </h3>
+
+          {currentImage.description && (
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-[#aaa69b]">
+              {currentImage.description}
+            </p>
+          )}
+
+          {currentImage.artist && (
+            <p className="mt-3 text-xs text-[#858176]">
+              Creator: {currentImage.artist}
+            </p>
+          )}
+
+          {currentImage.license && (
+            <p className="mt-1 text-xs text-[#858176]">
+              Licence: {currentImage.license}
+            </p>
+          )}
+
           <a
-            href={image.pageUrl}
+            href={currentImage.pageUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="block"
+            className="mt-3 inline-block text-xs text-[#c6a76a] hover:text-[#e4c991]"
           >
-            <div className="relative aspect-[4/3] bg-[#202119]">
-              <Image
-                src={image.thumbnailUrl}
-                alt={image.description || image.title}
-                fill
-                sizes="(max-width: 640px) 100vw, 50vw"
-                className="object-cover transition duration-500 hover:scale-105"
-              />
-            </div>
+            View original on Wikimedia ↗
           </a>
+        </div>
 
-          <figcaption className="p-5">
-            <h3 className="font-serif text-xl leading-snug">{image.title}</h3>
+        {/* Image counter */}
+        <div className="shrink-0 text-sm text-[#aaa69b] tabular-nums">
+          {String(currentIndex + 1).padStart(2, "0")} /{" "}
+          {String(images.length).padStart(2, "0")}
+        </div>
+      </div>
 
-            {image.description && (
-              <p className="mt-2 text-sm leading-6 text-[#aaa69b]">
-                {image.description}
-              </p>
-            )}
+      {/* Navigation progress */}
+      {images.length > 1 && (
+        <div className="mt-6 flex gap-1">
+          {images.map((image, index) => (
+            <button
+              key={image.id}
+              type="button"
+              onClick={() => {
+                if (isTransitioning || index === currentIndex) return;
 
-            {image.artist && (
-              <p className="mt-3 text-xs text-[#858176]">
-                Creator: {image.artist}
-              </p>
-            )}
+                setIsTransitioning(true);
 
-            {image.license && (
-              <p className="mt-2 text-xs text-[#858176]">
-                Licence: {image.license}
-              </p>
-            )}
-
-            <a
-              href={image.pageUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-3 inline-block text-xs text-[#c6a76a] hover:text-[#e4c991]"
-            >
-              View original on Wikimedia ↗
-            </a>
-          </figcaption>
-        </figure>
-      ))}
+                setTimeout(() => {
+                  setCurrentIndex(index);
+                  setIsTransitioning(false);
+                }, 180);
+              }}
+              aria-label={`Go to image ${index + 1}`}
+              className={`h-1 flex-1 transition-colors ${
+                index === currentIndex
+                  ? "bg-[#c6a76a]"
+                  : "bg-white/15 hover:bg-white/40"
+              }`}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
