@@ -1,4 +1,3 @@
-import Link from "next/link";
 import AtlasMap from "@/components/atlas-map";
 import { getPlaces } from "@/lib/cms/sanity";
 
@@ -58,31 +57,6 @@ export default async function AtlasPage() {
           Map data © OpenStreetMap contributors. Coordinates are approximate and
           intended for exploration, not navigation.
         </p>
-
-        <div className="mt-12">
-          <h2 className="font-serif text-3xl">Explore the entries</h2>
-
-          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {places.map((place) => (
-              <Link
-                key={place.slug}
-                href={`/places/${place.slug}`}
-                className="flex items-center justify-between gap-4 border border-white/10 p-5 transition hover:border-[#c6a76a]/50"
-              >
-                <div>
-                  <h3 className="font-serif text-xl">{place.name}</h3>
-                  <p className="mt-1 text-sm text-[#aaa69b]">
-                    {place.location}
-                  </p>
-                </div>
-
-                <span className="text-[#c6a76a]" aria-hidden="true">
-                  ↗
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
       </section>
 
       <footer className="border-t border-white/10 px-6 py-8 text-center text-xs text-[#858176]">
