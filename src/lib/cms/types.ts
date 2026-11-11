@@ -1,4 +1,14 @@
 import type { LostPlace } from "@/data/places";
+import type { PortableTextBlock } from "@portabletext/types";
+
+export type SanityArticleImage = {
+  _type: "image";
+  _key: string;
+  url?: string;
+  alt?: string;
+};
+
+export type SanityArticleContent = (PortableTextBlock | SanityArticleImage)[];
 
 export type SanityPlace = {
   _id: string;
@@ -14,7 +24,6 @@ export type SanityPlace = {
     lng?: number;
   };
   overview?: string;
-  history?: string[];
   discovery?: string;
   archaeologicalFindings?: string[];
   mysteries?: LostPlace["mysteries"];
@@ -31,6 +40,7 @@ export type SanityPlace = {
   image?: SanityImage;
   sources?: LostPlace["sources"];
   timeline?: LostPlace["timeline"];
+  articleBody?: SanityArticleContent;
 };
 
 export type SanityTheme = {

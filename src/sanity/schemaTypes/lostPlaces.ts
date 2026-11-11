@@ -132,18 +132,6 @@ export const lostPlace = defineType({
     }),
 
     defineField({
-      name: "history",
-      title: "Historical Background",
-      type: "array",
-      of: [
-        defineArrayMember({
-          type: "text",
-          rows: 3,
-        }),
-      ],
-    }),
-
-    defineField({
       name: "discovery",
       title: "Rediscovery and Excavation",
       type: "text",

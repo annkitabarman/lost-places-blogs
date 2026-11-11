@@ -12,7 +12,6 @@ export const allPlacesQuery = defineQuery(`
     status,
     coordinates,
     overview,
-    history,
     discovery,
     archaeologicalFindings,
     mysteries,
@@ -65,7 +64,13 @@ export const allPlacesQuery = defineQuery(`
       "image": image.asset->url
     },
 
-    articleBody
+    articleBody[]{
+      ...,
+      _type == "image" => {
+        ...,
+        "url": asset->url
+      }
+    }
   }
 `);
 
@@ -81,7 +86,6 @@ export const placeBySlugQuery = defineQuery(`
     status,
     coordinates,
     overview,
-    history,
     discovery,
     archaeologicalFindings,
     mysteries,
@@ -134,7 +138,13 @@ export const placeBySlugQuery = defineQuery(`
       "image": image.asset->url
     },
 
-    articleBody
+    articleBody[]{
+      ...,
+      _type == "image" => {
+        ...,
+        "url": asset->url
+      }
+    }
   }
 `);
 

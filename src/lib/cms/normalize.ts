@@ -24,8 +24,8 @@ export function normalizePlace(place: SanityPlace): LostPlace {
 
     status: place.status ?? "",
     overview: place.overview ?? "",
-    history: place.history ?? [],
     discovery: place.discovery ?? "",
+    articleBody: place.articleBody ?? [],
     archaeologicalFindings: place.archaeologicalFindings ?? [],
     mysteries: place.mysteries ?? [],
     timeline: place.timeline ?? [],

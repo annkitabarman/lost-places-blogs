@@ -8,6 +8,9 @@ import {
 import { getPlaces, getPlaceBySlug } from "@/lib/cms/sanity";
 import Image from "next/image";
 import PlaceGallery from "@/components/place-gallery";
+import { PortableText } from "@portabletext/react";
+import type { PortableTextComponents } from "@portabletext/react";
+import type { SanityArticleImage } from "@/lib/cms/types";
 
 type PlacePageProps = {
   params: Promise<{ slug: string }>;
@@ -34,6 +37,67 @@ export async function generateMetadata({ params }: PlacePageProps) {
     description: place.overview || place.description,
   };
 }
+
+const articleComponents: PortableTextComponents = {
+  block: {
+    normal: ({ children }) => (
+      <p className="text-base leading-8 text-[#b9b3a6]">{children}</p>
+    ),
+
+    h2: ({ children }) => (
+      <h2 className="mt-12 font-serif text-3xl sm:text-4xl">{children}</h2>
+    ),
+
+    h3: ({ children }) => (
+      <h3 className="mt-8 font-serif text-2xl">{children}</h3>
+    ),
+
+    blockquote: ({ children }) => (
+      <blockquote className="border-l-2 border-[#c6a76a] pl-6 font-serif text-xl italic leading-9 text-[#c9c1b1]">
+        {children}
+      </blockquote>
+    ),
+  },
+
+  marks: {
+    strong: ({ children }) => (
+      <strong className="font-semibold text-[#e9e2d2]">{children}</strong>
+    ),
+
+    em: ({ children }) => <em>{children}</em>,
+
+    link: ({ children, value }) => (
+      <a
+        href={value?.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-[#c6a76a] underline underline-offset-4 hover:text-[#e4c991]"
+      >
+        {children}
+      </a>
+    ),
+  },
+
+  types: {
+    image: ({ value }) => {
+      const image = value as SanityArticleImage;
+
+      if (!image.url) return null;
+
+      return (
+        <figure className="my-10">
+          <Image
+            src={image.url}
+            alt={image.alt ?? ""}
+            width={1200}
+            height={800}
+            className="h-auto w-full border border-white/10 object-cover"
+          />
+        </figure>
+      );
+    },
+  },
+};
 
 export default async function PlacePage({ params }: PlacePageProps) {
   const { slug } = await params;
@@ -135,7 +199,7 @@ export default async function PlacePage({ params }: PlacePageProps) {
           className="border-y border-white/10 bg-[#171813]"
         >
           <div className="mx-auto flex max-w-7xl flex-wrap gap-x-7 gap-y-3 px-6 py-5 text-xs uppercase tracking-widest text-[#aaa69b] lg:px-10">
-            {place.history.length > 0 && (
+            {place.articleBody && place.articleBody.length > 0 && (
               <a href="#history" className="transition hover:text-[#c6a76a]">
                 History
               </a>
@@ -173,27 +237,23 @@ export default async function PlacePage({ params }: PlacePageProps) {
         <div className="mx-auto grid max-w-7xl gap-14 px-6 py-14 lg:grid-cols-[minmax(0,1fr)_280px] lg:gap-20 lg:px-10 lg:py-20">
           {/* Main article */}
           <div className="min-w-0">
-            {/* History */}
+            {/* Historical Article */}
 
-            {place.history.length > 0 && (
-              <section id="history" className="scroll-mt-8">
+            {place.articleBody && place.articleBody.length > 0 && (
+              <section id="history" className="mt-0 scroll-mt-8 ">
                 <p className="text-xs uppercase tracking-[0.3em] text-[#c6a76a]">
-                  01 / The historical record
+                  Historical narrative
                 </p>
 
                 <h2 className="mt-4 font-serif text-4xl sm:text-5xl">
-                  The story of {place.name}
+                  The story behind {place.name}
                 </h2>
 
-                <div className="mt-8 space-y-6">
-                  {place.history.map((paragraph, index) => (
-                    <p
-                      key={`${index}-${paragraph.slice(0, 20)}`}
-                      className="text-base leading-8 text-[#b9b3a6]"
-                    >
-                      {paragraph}
-                    </p>
-                  ))}
+                <div className="mt-10 space-y-6">
+                  <PortableText
+                    value={place.articleBody}
+                    components={articleComponents}
+                  />
                 </div>
               </section>
             )}
@@ -201,7 +261,7 @@ export default async function PlacePage({ params }: PlacePageProps) {
             {place.discovery.length > 0 && (
               <section className="mt-16 border-t border-white/10 pt-12">
                 <p className="text-xs uppercase tracking-[0.3em] text-[#c6a76a]">
-                  02 / Rediscovery
+                  Rediscovery
                 </p>
 
                 <h2 className="mt-4 font-serif text-3xl sm:text-4xl">
@@ -220,7 +280,7 @@ export default async function PlacePage({ params }: PlacePageProps) {
                 className="mt-16 scroll-mt-8 border-t border-white/10 pt-12"
               >
                 <p className="text-xs uppercase tracking-[0.3em] text-[#c6a76a]">
-                  03 / Material evidence
+                  Material evidence
                 </p>
 
                 <h2 className="mt-4 font-serif text-3xl sm:text-4xl">
@@ -263,7 +323,7 @@ export default async function PlacePage({ params }: PlacePageProps) {
 
                 <div className="relative">
                   <p className="text-xs uppercase tracking-[0.3em] text-[#c6a76a]">
-                    04 / Questions without easy answers
+                    Questions without easy answers
                   </p>
 
                   <h2 className="mt-4 font-serif text-4xl sm:text-5xl">
@@ -321,7 +381,7 @@ export default async function PlacePage({ params }: PlacePageProps) {
                 className="mt-20 scroll-mt-8 border-t border-white/10 pt-12"
               >
                 <p className="text-xs uppercase tracking-[0.3em] text-[#c6a76a]">
-                  05 / Passage of time
+                  Passage of time
                 </p>
 
                 <h2 className="mt-4 font-serif text-4xl sm:text-5xl">
@@ -386,7 +446,7 @@ export default async function PlacePage({ params }: PlacePageProps) {
                 className="mt-20 scroll-mt-8 border-t border-white/10 pt-12"
               >
                 <p className="text-xs uppercase tracking-[0.3em] text-[#c6a76a]">
-                  06 / Further reading
+                  Further reading
                 </p>
 
                 <h2 className="mt-4 font-serif text-3xl sm:text-4xl">
@@ -447,18 +507,8 @@ export default async function PlacePage({ params }: PlacePageProps) {
               </div>
 
               <div>
-                <dt className="text-[#858176]">Civilization</dt>
-                <dd className="mt-1 leading-6">{place.civilization}</dd>
-              </div>
-
-              <div>
                 <dt className="text-[#858176]">Classification</dt>
                 <dd className="mt-1 leading-6">{place.category}</dd>
-              </div>
-
-              <div>
-                <dt className="text-[#858176]">Present status</dt>
-                <dd className="mt-1 leading-6">{place.status}</dd>
               </div>
 
               <div>
