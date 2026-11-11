@@ -1,10 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import {
-  ArrowLeftIcon,
-  ArrowUpRightIcon,
-  CompassIcon,
-} from "@/components/icons";
+import { ArrowLeftIcon, ArrowUpRightIcon } from "@/components/icons";
 import { getPlaces, getPlaceBySlug } from "@/lib/cms/sanity";
 import Image from "next/image";
 import PlaceGallery from "@/components/place-gallery";
@@ -109,23 +105,6 @@ export default async function PlacePage({ params }: PlacePageProps) {
 
   return (
     <main className="min-h-screen bg-[#11120f] text-[#e9e2d2]">
-      {/* Navigation */}
-      <header className="border-b border-white/10">
-        <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-10">
-          <Link href="/" className="flex items-center gap-3">
-            <CompassIcon size={28} weight="light" className="text-[#c6a76a]" />
-            <span className="font-serif text-lg">Atlas of Lost Places</span>
-          </Link>
-
-          <Link
-            href="/atlas"
-            className="text-sm text-[#aaa69b] transition hover:text-[#c6a76a]"
-          >
-            Explore atlas ↗
-          </Link>
-        </nav>
-      </header>
-
       {/* Article header */}
       <article>
         <section className="mx-auto max-w-7xl px-6 pb-12 pt-10 lg:px-10 lg:pb-16 lg:pt-14">

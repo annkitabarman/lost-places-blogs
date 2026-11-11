@@ -42,16 +42,9 @@ export default function TimelineView({ places }: TimelineViewProps) {
       : events.filter((event) => event.type === activeFilter);
 
   return (
-    <main className="min-h-screen bg-[#171715] px-6 py-16 text-[#e8e0d0]">
+    <main className="min-h-screen bg-[#171715] px-6 py-10 text-[#e8e0d0]">
       <div className="mx-auto max-w-4xl">
-        <Link
-          href="/"
-          className="text-sm text-[#c6a76a] transition hover:text-[#e4c991]"
-        >
-          ← Back to the atlas
-        </Link>
-
-        <header className="mb-12 mt-10">
+        <header className="mb-12 ">
           <p className="text-xs uppercase tracking-[0.3em] text-[#c6a76a]">
             Chronological archive
           </p>

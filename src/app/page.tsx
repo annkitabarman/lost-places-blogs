@@ -2,7 +2,6 @@ import Link from "next/link";
 import {
   ArrowUpRightIcon,
   CompassIcon,
-  MagnifyingGlassIcon,
   MapTrifoldIcon,
 } from "@/components/icons";
 import { getPlaces, getThemes } from "@/lib/cms/sanity";
@@ -10,50 +9,16 @@ import PlaceCard from "@/components/place-card";
 
 export default async function Home() {
   const [places, themes] = await Promise.all([getPlaces(), getThemes()]);
+  console.log(themes);
 
   const featuredPlaces = places.slice(0, 3);
   return (
     <main className="min-h-screen bg-[#11120f] text-[#e9e2d2]">
-      {/* Navigation */}
-      <header className="border-b border-white/10">
-        <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-10">
-          <Link href="/" className="flex items-center gap-3">
-            <CompassIcon size={30} weight="light" className="text-[#c6a76a]" />
-            <span className="font-serif text-xl tracking-wide">
-              Atlas of Lost Places
-            </span>
-          </Link>
-
-          <div className="hidden items-center gap-8 text-sm text-[#c4bdae] md:flex">
-            <Link href="/atlas" className="transition hover:text-[#d6b779]">
-              Explore Atlas
-            </Link>
-            <Link href="/places" className="transition hover:text-[#d6b779]">
-              Places
-            </Link>
-            <Link href="/timeline" className="transition hover:text-[#d6b779]">
-              Timeline
-            </Link>
-            <Link href="/about" className="transition hover:text-[#d6b779]">
-              About
-            </Link>
-          </div>
-
-          <Link
-            href="/atlas"
-            className="flex items-center gap-2 border border-[#c6a76a]/50 px-4 py-2 text-sm transition hover:bg-[#c6a76a] hover:text-[#11120f]"
-          >
-            Start exploring
-            <ArrowUpRightIcon size={16} />
-          </Link>
-        </nav>
-      </header>
-
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-white/10">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_75%_35%,rgba(137,111,65,0.16),transparent_55%)]" />
 
-        <div className="relative mx-auto grid max-w-7xl gap-12 px-6 py-24 md:py-32 lg:grid-cols-[1.15fr_0.85fr] lg:px-10 lg:py-36">
+        <div className="relative mx-auto grid max-w-7xl gap-12 px-6 py-10 lg:grid-cols-[1.15fr_0.85fr] lg:px-14 ">
           <div className="flex flex-col justify-center">
             <p className="mb-6 text-xs uppercase tracking-[0.35em] text-[#c6a76a]">
               A digital atlas of forgotten worlds
@@ -199,9 +164,6 @@ export default async function Home() {
                 className="group flex min-h-64 flex-col border border-white/10 p-7 transition hover:border-[#c6a76a]/50 hover:bg-[#1d1e17]"
               >
                 <div className="flex items-start justify-between">
-                  <span className="font-serif text-4xl text-[#c6a76a]/70">
-                    {theme.symbol}
-                  </span>
                   <span className="text-xs tracking-widest text-[#77776b]">
                     {theme.number}
                   </span>
@@ -221,30 +183,6 @@ export default async function Home() {
             ))}
           </div>
         </div>
-      </section>
-
-      {/* Closing call to action */}
-      <section className="mx-auto max-w-7xl px-6 py-24 text-center lg:px-10 lg:py-32">
-        <MagnifyingGlassIcon
-          size={32}
-          weight="light"
-          className="mx-auto mb-6 text-[#c6a76a]"
-        />
-        <p className="text-xs uppercase tracking-[0.3em] text-[#c6a76a]">
-          Your next discovery awaits
-        </p>
-        <h2 className="mx-auto mt-5 max-w-2xl font-serif text-4xl leading-tight sm:text-5xl">
-          The past is not empty.
-          <br />
-          It is waiting to be found.
-        </h2>
-        <Link
-          href="/atlas"
-          className="mt-9 inline-flex items-center gap-3 border border-[#c6a76a]/50 px-6 py-3.5 text-sm transition hover:bg-[#c6a76a] hover:text-[#11120f]"
-        >
-          Enter the atlas
-          <ArrowUpRightIcon size={17} />
-        </Link>
       </section>
 
       {/* Footer */}

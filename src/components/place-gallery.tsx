@@ -116,7 +116,7 @@ export default function PlaceGallery({ slug }: PlaceGalleryProps) {
               type="button"
               onClick={goToPrevious}
               aria-label="Previous image"
-              className="absolute left-4 top-1/2 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/60 text-2xl text-white backdrop-blur-sm transition hover:bg-black/90"
+              className="absolute left-4 top-1/2 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/60 text-2xl text-white backdrop-blur-sm transition hover:bg-black/90 hover:cursor-pointer"
             >
               ‹
             </button>
@@ -128,7 +128,7 @@ export default function PlaceGallery({ slug }: PlaceGalleryProps) {
               type="button"
               onClick={goToNext}
               aria-label="Next image"
-              className="absolute right-4 top-1/2 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/60 text-2xl text-white backdrop-blur-sm transition hover:bg-black/90"
+              className="absolute right-4 top-1/2 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/60 text-2xl text-white backdrop-blur-sm transition hover:bg-black/90 hover:cursor-pointer"
             >
               ›
             </button>
