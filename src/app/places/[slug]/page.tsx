@@ -247,9 +247,20 @@ export default async function PlacePage({ params }: PlacePageProps) {
                   Beneath the surface
                 </h2>
 
-                <p className="mt-6 text-base leading-8 text-[#b9b3a6]">
-                  {place.discovery}
-                </p>
+                <div className="mt-6">
+                  {typeof place.discovery === "string" ? (
+                    <p className="whitespace-pre-line text-base leading-8 text-[#b9b3a6]">
+                      {place.discovery}
+                    </p>
+                  ) : (
+                    <div className="space-y-6">
+                      <PortableText
+                        value={place.discovery}
+                        components={articleComponents}
+                      />
+                    </div>
+                  )}
+                </div>
               </section>
             )}
             {/* Archaeological evidence */}

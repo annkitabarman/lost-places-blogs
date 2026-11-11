@@ -9,6 +9,7 @@ export type SanityArticleImage = {
 };
 
 export type SanityArticleContent = (PortableTextBlock | SanityArticleImage)[];
+export type SanityRichText = PortableTextBlock[];
 
 export type SanityPlace = {
   _id: string;
@@ -24,7 +25,7 @@ export type SanityPlace = {
     lng?: number;
   };
   overview?: string;
-  discovery?: string;
+  discovery?: string | SanityRichText;
   archaeologicalFindings?: string[];
   mysteries?: LostPlace["mysteries"];
   theme?: {

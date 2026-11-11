@@ -134,8 +134,19 @@ export const lostPlace = defineType({
     defineField({
       name: "discovery",
       title: "Rediscovery and Excavation",
-      type: "text",
-      rows: 5,
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "block",
+          styles: [{ title: "Normal", value: "normal" }],
+          marks: {
+            decorators: [
+              { title: "Bold", value: "strong" },
+              { title: "Italic", value: "em" },
+            ],
+          },
+        }),
+      ],
     }),
 
     // Archaeological findings

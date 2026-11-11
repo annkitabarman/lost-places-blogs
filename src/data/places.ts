@@ -1,4 +1,4 @@
-import { SanityArticleContent } from "@/lib/cms/types";
+import type { SanityArticleContent, SanityRichText } from "@/lib/cms/types";
 
 export type TimelineEvent = {
   year: string;
@@ -33,7 +33,7 @@ export type LostPlace = {
   civilization: string;
   status: string;
   overview: string;
-  discovery: string;
+  discovery: string | SanityRichText;
 
   // Evidence and mysteries
   archaeologicalFindings: string[];

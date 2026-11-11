@@ -9,7 +9,6 @@ import PlaceCard from "@/components/place-card";
 
 export default async function Home() {
   const [places, themes] = await Promise.all([getPlaces(), getThemes()]);
-  console.log(themes);
 
   const featuredPlaces = places.slice(0, 3);
   return (
